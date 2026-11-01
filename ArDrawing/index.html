@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<base target="_blank">
+<title>getUserMedia</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="container">
+    <header class="topbar">
+        <h1>Percobaan 1 : Menampilkan Webcam Dengan HTML5</h1>
+        <div id="errorMsg"></div>
+    </header>
+
+    <div class="highlight" id="stage">
+        <video id="gum-local" autoplay playsinline></video>
+        <canvas id="overlay" aria-label="Gambar sketsa di atas kamera"></canvas>
+        <div class="hint" id="hint" aria-live="polite"></div>
+    </div>
+
+    <section class="controls" aria-label="Pengaturan gambar">
+        <div class="buttons">
+            <button type="button" id="lockBtn" class="btn btn-lock" aria-pressed="false">
+                <svg class="icon icon-open" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/></svg>
+                <svg class="icon icon-closed" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                <span>Kunci posisi</span>
+            </button>
+            <button type="button" id="resetBtn" class="btn">Reset posisi</button>
+        </div>
+
+        <label class="field">
+            <span class="name">Opasitas</span>
+            <input type="range" id="opacity" min="0" max="100" step="1" value="50">
+            <output id="opacityOut" for="opacity">50%</output>
+        </label>
+        <label class="field">
+            <span class="name">Ukuran</span>
+            <input type="range" id="zoom" min="10" max="500" step="1" value="100">
+            <output id="zoomOut" for="zoom">100%</output>
+        </label>
+        <label class="field">
+            <span class="name">Rotasi</span>
+            <input type="range" id="rotation" min="-180" max="180" step="1" value="0">
+            <output id="rotationOut" for="rotation">0°</output>
+        </label>
+    </section>
+</div>
+<script src="js/main.js"></script>
+<script src="js/overlay.js"></script>
+</body>
+</html>

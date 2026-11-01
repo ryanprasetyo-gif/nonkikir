@@ -1,0 +1,245 @@
+:root {
+    --bg: #101317;
+    --panel: #181c21;
+    --text: #eef1f4;
+    --muted: #96a0ab;
+    --line: rgba(255, 255, 255, 0.12);
+    --accent: #ffb020;
+    --accent-ink: #1b1300;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+}
+
+/* Halaman penuh layar: judul di atas, kamera di tengah, kontrol di bawah. */
+#container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+}
+
+.topbar {
+    padding: 8px 14px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#errorMsg:not(:empty) {
+    margin-top: 4px;
+    color: #ff8a80;
+    font-size: 13px;
+}
+
+#errorMsg p {
+    margin: 2px 0;
+}
+
+/* Area kamera + canvas. Canvas menutupi persis area video. */
+.highlight {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    background: #000;
+    /* Sentuhan di area kamera tidak boleh men-zoom/menggeser halaman,
+       termasuk saat gambar dikunci dan canvas tidak menerima event. */
+    touch-action: none;
+}
+
+#gum-local {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: none; /* gesture geser/cubit ditangani sendiri */
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+canvas.is-dragging {
+    cursor: grabbing;
+}
+
+/* Saat dikunci, canvas tidak menerima sentuhan/klik sama sekali. */
+canvas.is-locked {
+    pointer-events: none;
+    cursor: default;
+}
+
+.hint {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: calc(100% - 24px);
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(16, 19, 23, 0.72);
+    color: var(--text);
+    font-size: 12px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.hint.is-locked {
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+}
+
+/* Panel kontrol */
+.controls {
+    display: grid;
+    gap: 8px 20px;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: var(--panel);
+    border-top: 1px solid var(--line);
+}
+
+.buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.btn:focus-visible,
+input[type="range"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-lock {
+    flex: 1;
+}
+
+.btn-lock[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+}
+
+.btn-lock[aria-pressed="true"]:hover {
+    background: #ffc04d;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.btn-lock .icon-closed,
+.btn-lock[aria-pressed="true"] .icon-open {
+    display: none;
+}
+
+.btn-lock[aria-pressed="true"] .icon-closed {
+    display: block;
+}
+
+.field {
+    display: grid;
+    grid-template-columns: 64px 1fr 46px;
+    align-items: center;
+    gap: 10px;
+}
+
+.field .name {
+    color: var(--muted);
+}
+
+.field output {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+input[type="range"] {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    accent-color: var(--accent);
+}
+
+input[type="range"]:disabled {
+    opacity: 0.4;
+}
+
+.field:has(input:disabled) .name,
+.field:has(input:disabled) output {
+    opacity: 0.4;
+}
+
+/* Layar lebar: semua kontrol dalam satu baris. */
+@media (min-width: 760px) {
+    .controls {
+        grid-template-columns: auto repeat(3, minmax(0, 1fr));
+        align-items: center;
+    }
+
+    .btn-lock {
+        flex: none;
+    }
+
+    .field {
+        grid-template-columns: auto 1fr 40px;
+    }
+}
